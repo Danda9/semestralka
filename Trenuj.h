@@ -8,19 +8,20 @@ class Trenuj
     public:
         Trenuj(std::vector <std::vector <double>>& X_in, std::vector <double> om_in, std::vector <double> w_in);
         virtual ~Trenuj();
-        double pomocna();
+        double pomocna(), prah;
+        std::vector <double> vysledek,vahy;
         int y();
         void porovnej();
-        void porovnavej();
 
     protected:
 
     private:
-        std::vector <std::vector <double>> X;
-        std::vector <double> om, w;
-        double v1,v2,w1,w2,yy, prah;
-        int poradi;
+        std::vector <std::vector <double>> X, vektorUceni;
+        std::vector <double> om, w, porovnavej();
+        double yy;
+        int poradi, pocitadlo, maxPoradi, w3;
         bool kontrola;
+        void zapisDoVektoru(), UlozDoSouboru();
 };
 
 #endif // TRENUJ_H

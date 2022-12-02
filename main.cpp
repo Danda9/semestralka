@@ -2,99 +2,68 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 #include "Trenuj.h"
+#include "Testuj.h"
 #include "NactiData.h"
 
 
 
 int main(){
+    std::srand((unsigned) time(NULL));      //aby se mi pokazde tvorila zarucene tvorila pseudonahodna cisla
 
-    std::vector <double> omega,ww;
-    std::vector <std::vector <double>> XX;
-    double pr;
-    //int pomocne, y;
-    //int poradi;
-    NactiData neco = NactiData();
-    pr = 8.4;
-    //std::vector <vector> X;
 
-    //XX = {{2.3,2.9,1},{-2.1,10.6,1},{20.8,21.7,1}};
-    //omega = {0,0,1};
-    ww = {5.9,-5.2,pr};
-    XX=neco.vektor();
+    std::vector <double> omega,ww, natrenovane_vahy,vysledek_testu;
+    std::vector <std::vector <double>> XX,YY;
+    double pocatecniPrah, natrenovany_prah, w1,w2;
 
-    omega=NactiData().ome;
-    //Trenuj lol = Trenuj(XX,omega,ww);
-    //int pokus = lol.pomocna();
 
-    //std::cout << pokus;
+    NactiData treninkovaData=NactiData();
+    NactiData testovaciData=NactiData();
 
-    //for(int i=0; i<40; i++){
-    //lol.porovnavej();
+
+    w1=std::rand()%100;                //chci, aby vahy byly na 2 desetinna mista
+    w2=std::rand()%100;
+    pocatecniPrah = std::rand()%20+ (-10);  //nahodne cislo mezi cisli -10 a 10
+    ww={w1/1,w2/1,pocatecniPrah};   //pocatencni hodnoty, na kterych se zacina ucit
+
+
+    XX=treninkovaData.vektor_souradnic;          //nacteni treninkovych souradnic do vektoru vektoruu, ve forme [[souradnice x1, souradnice y1, 1],[souradnice x2, souradnice y2, 1],...
+    omega=treninkovaData.omega_out;       //nactecni hodnot, ktere by neuron mel neuron urcit, resp. v jake polorovine bod lezi, vektor s cisli 0 a 1
+
+
+    Trenuj lol = Trenuj(XX,omega,ww);   //samotne natrenovani/zjisteni hodnot vah a prahu neuronu
+                                        //to "lol" je jakoby zbytecne, ale musel jsem ho vytvorit, abych mel pristup k tem hledanym hodnotam
+    natrenovane_vahy=lol.vahy;
+    natrenovany_prah=lol.prah;
+
+
+    YY=testovaciData.vektor_souradnic;           //nacteni testovacich souradnic (kterym neuron urci, jejich hodnotu tj. 0 nebo 1) do vektoru vektoruu ve forme
+                                    //[[souradnice x1, souradnice y1, 1],[souradnice x2, souradnice y2, 1],...  ty jednicky jsou tam zbytecny, nepotrebny, jsou tam, protoze pouzivam stejnou vec jako
+                                    //na nacteni treninkovych dat
+
+    Testuj lol2=Testuj(YY,natrenovane_vahy,natrenovany_prah);   //zjistovani jakou hodnotu (0 nebo 1) maji vektory
+                                                                //to "lol2" je jakoby zbytecne, ale musel jsem ho vytvorit, abych mel pristup k tem hledanym hodnotam
+    vysledek_testu=lol2.rozrazeni_out;      // vektor nul a jednicek
+
+
+
+
+    //for(int i=0; i<YY.size(); i++){               //zde lze vypsat testovaci data spolecne s prirazenymi hodnotami
+    //    for(int j=0; j<YY[i].size(); j++){
+    //        std::cout << YY[i][j];
+    //        std::cout << " ";
+    //    }
+    //    std::cout << "\n";
     //}
-    std::cout << XX[0].size() << "haha\n";
 
-
-        //std::cout << rows[1][3];
-        //std::cout << " sakjfbkjasbfjasjfasjflasnfaslflkaslnflasnlfnaslnflkasnflaslnflsanfnsalnflaksnflksanfasknfaslkn";
-
-
-
-    for(int i=0; i<XX.size(); i++){
-        for(int j; j<3; j++){
-            std::cout << XX[i][j] << " "<<" poly";
-        }
-        std::cout << "\n";
+    std::cout << "\nPrirazene hodnoty: \n";
+    for(int i=0;i<vysledek_testu.size();i++){
+        std::cout << vysledek_testu[i] << "\n";
     }
-
-
-
-
-//{-2,10,1}
-
-
-
-    //bool kontrola = false;
-
-        //for(int i; i < 4; i++){
-        //poradi = 0; //poradi asi toto spatne funguje""""""""""
-        //for(std:: vector v : X){
-          //  std::cout << "poradi:" << poradi << "\n";
-            //pomocne = v[0]*w[0]+v[1]*w[1]-prah;
-            //if (pomocne<0){
-              //  y=0;
-            //}
-            //else{
-              //  y=1;
-            //}
-            //std::cout << y<< "\n";
-            //if (y!=omega[poradi]){
-            //    w[0] = w[0] + v[0]*(omega[poradi]-y);
-            //    w[1] = w[1] + v[1]*(omega[poradi]-y);
-            //    break;
-            //}
-
-            //poradi=1;
-        //}
-
-        //for (int ii : w) {
-          //  std::cout << w[ii] << " ";
-        //}
-       // std::cout << "czklus\n";
-
-
-    //}
-
-//}
-//    for (std::vector vv : w){
-  //     for (int h : k) {
-    //        std::cout << k[h] << " ";
-        //std::cout << "\n" << std::endl;
-    //}
-      //  std::cout << "\n";
-    //}
+    std::cout << "Hodnoty vah neuronu: " << natrenovane_vahy[0] << " " << natrenovane_vahy[1] << "\n";
+    std::cout << "Hodnota prahu neuronu: " << natrenovany_prah << "\n";
 
 
     return 0;
 }
-

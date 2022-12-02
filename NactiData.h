@@ -8,20 +8,18 @@ class NactiData
 {
 public:
     NactiData();
-    std::vector<std::vector <double>> v,vek;
-    std::vector<double> ome;
+    std::vector<std::vector <double>> dataZeSouboru,vektor_souradnic;
+    std::vector<double> omega_out;
     virtual ~NactiData();
-        std::vector<std::vector <double>> data(), vektor();
 
 protected:
 
 private:
-    bool testovaci;
     std::string fileName;
-
-    std::vector<double> omega();
+    std::vector<std::vector <double>> data(), vektor();
+    std::vector<double> omega_inside();
     void zeptejSe();
-    //std::vector<std::vector<double>> rows;
+
 };
 
 #endif // NACTIDATA_H
